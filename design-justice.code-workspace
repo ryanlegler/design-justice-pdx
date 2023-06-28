@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "name": "design-justice-portland",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "blueprint.templatesPath": [
+            "/Users/ryan.legler/DEV/design-justice-portland/.vscode/blueprint-templates" // this is brittle
+        ]
+    }
+}
