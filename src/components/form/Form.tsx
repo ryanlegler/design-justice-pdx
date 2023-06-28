@@ -14,7 +14,9 @@ import { FormProps, PropertyMap } from "./types";
 import { Property } from "@/types";
 
 function Form({ properties, createRow, dbId }: FormProps) {
-    const { register, handleSubmit } = useForm({});
+    const { register, handleSubmit, formState } = useForm({});
+
+    const { isSubmitted } = formState;
 
     const propertyCollection: Property[] = Object.keys(properties)
         .map((key) => ({
@@ -51,17 +53,25 @@ function Form({ properties, createRow, dbId }: FormProps) {
     // console.log("propertyCollection", propertyCollection);
 
     return (
-        <StyledForm
-            onSubmit={handleSubmit((data: PropertyMap) => createRow({ properties, data, dbId }))}
-        >
-            {propertyCollection.map((property) => (
-                <FormElement key={property.id} property={property} register={register} />
-            ))}
+        <>
+            {isSubmitted ? (
+                <div>Thanks! Your Information has been collected.</div>
+            ) : (
+                <StyledForm
+                    onSubmit={handleSubmit((data: PropertyMap) =>
+                        createRow({ properties, data, dbId })
+                    )}
+                >
+                    {propertyCollection.map((property) => (
+                        <FormElement key={property.id} property={property} register={register} />
+                    ))}
 
-            <div className="flex flex-grow-0 justify-end mt-2">
-                <Button type="submit">Submit</Button>
-            </div>
-        </StyledForm>
+                    <div className="flex flex-grow-0 justify-end mt-2">
+                        <Button type="submit">Submit</Button>
+                    </div>
+                </StyledForm>
+            )}
+        </>
     );
 }
 

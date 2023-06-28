@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { notion } from "@/lib/notion";
 import { CreatePageParameters } from "@notionhq/client/build/src/api-endpoints";
 import { Properties, PropertyType, Option } from "@/types";
@@ -133,6 +132,4 @@ export async function createRow({
     const paramsPayload = getPageParams({ properties, data, userId, dbId });
     console.dir({ paramsPayload }, { depth: null });
     const response = await notion.pages.create(paramsPayload);
-    console.log("response", response);
-    // redirect(path);
 }
