@@ -1,4 +1,6 @@
 import tw from "tailwind-styled-components";
 export const StyledSelect = tw.select`
-    p-2
+    px-3
+    py-4
+    rounded-md
 `;

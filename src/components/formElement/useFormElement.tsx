@@ -23,103 +23,137 @@ export function useFormElement({
             return {
                 select: () => {
                     return (
-                        <Select
-                            required={required}
-                            label={name}
-                            options={options}
-                            {...register(id)}
-                        />
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
+                            <Select
+                                required={required}
+                                options={options}
+                                {...register(id, { required })}
+                                // placeholder={name}
+                            />
+                        </StyledFormGroup>
                     );
                 },
                 multi_select: () => {
                     return (
-                        <Select
-                            required={required}
-                            label={name}
-                            options={options}
-                            {...register(id)}
-                        />
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
+                            <Select required={required} options={options} {...register(id)} />
+                        </StyledFormGroup>
                     );
                 },
                 status: () => {
                     return (
-                        <Select
-                            required={required}
-                            label={name}
-                            options={options}
-                            {...register(id)}
-                        />
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
+                            <Select required={required} options={options} {...register(id)} />
+                        </StyledFormGroup>
                     );
                 },
                 date: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput required={required} type="date" {...register(id)} />
                         </StyledFormGroup>
                     );
                 },
                 created_time: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput required={required} type="date" {...register(id)} />
                         </StyledFormGroup>
                     );
                 },
                 title: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput required={required} type="text" {...register(id)} />
                         </StyledFormGroup>
                     );
                 },
                 email: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput required={required} type="email" {...register(id)} />
                         </StyledFormGroup>
                     );
                 },
                 checkbox: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput required={required} type="checkbox" {...register(id)} />
                         </StyledFormGroup>
                     );
                 },
                 text: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
-                            <StyledInput required={required} type="text" {...register(id)} />
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
+                            <StyledInput
+                                // placeholder={name}
+                                required={required}
+                                type="text"
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
                 rich_text: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
-                            <StyledInput required={required} type="text" {...register(id)} />
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
+                            <StyledInput
+                                // placeholder={name}
+                                required={required}
+                                type="text"
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
                 number: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput required={required} type="text" {...register(id)} />
                         </StyledFormGroup>
                     );
                 },
                 phone_number: () => {
                     return (
-                        <StyledFormGroup>
-                            {name}
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
                             <StyledInput
+                                // placeholder={name}
                                 required={required}
                                 // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                                 type="tel"
