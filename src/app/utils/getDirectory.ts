@@ -4,6 +4,8 @@ import { PropertyResponse } from "@/types";
 import {
     PageObjectResponse,
     QueryDatabaseResponse,
+    RichTextItemResponse,
+    TextRichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
 export async function getDirectory() {
@@ -21,9 +23,12 @@ export async function getDirectory() {
             },
             []
         );
-        // add name property to some special config
-        const name = expandedProperties.find((property) => property.id === NAME_PROPERTY_ID)
-            ?.rich_text?.[0]?.text?.content;
+        const match = expandedProperties.find((property) => property.id === NAME_PROPERTY_ID) as {
+            type: "rich_text";
+            rich_text: Array<RichTextItemResponse>;
+            id: string;
+        };
+        const name = (match?.rich_text?.[0] as TextRichTextItemResponse)?.text?.content;
         return {
             imageUrl,
             userId,

@@ -15,7 +15,7 @@ export async function getHydratedItems(raw: QueryDatabaseResponse): Promise<Item
 
     const results: Item[] = raw.results.map((ask) => {
         const userId = (ask as any)?.properties?.["userId*admin"]?.title?.[0]?.text?.content;
-        const { imageUrl, name } = directory?.find((item) => item.userId === userId) || {};
+        const { imageUrl, name = "" } = directory?.find((item) => item.userId === userId) || {};
         const properties = (ask as PageObjectResponse).properties;
         const expandedProperties: PropertyResponse[] = Object.entries(properties).reduce(
             (prev: PropertyResponse[], [_, object]) => {
