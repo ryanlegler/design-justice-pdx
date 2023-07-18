@@ -60,16 +60,18 @@ const getPropertyValue = (property: PropertyResponse) => {
         },
         date: () => {
             const rawTime = (property as DatePropertyItemObjectResponse)?.date?.start || "";
-            const formattedTime = new Date(rawTime).toLocaleDateString("en-US", {
-                weekday: "short",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                // hour: "numeric",
-                // minute: "numeric",
-                // second: "numeric",
-                // timeZoneName: "short",
-            });
+            const formattedTime =
+                rawTime &&
+                new Date(rawTime).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    // hour: "numeric",
+                    // minute: "numeric",
+                    // second: "numeric",
+                    // timeZoneName: "short",
+                });
             return formattedTime;
         },
         created_time: () => {
