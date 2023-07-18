@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 //components
@@ -12,11 +12,28 @@ import { StyledForm } from "./styledComponents";
 // types
 import { FormProps, PropertyMap } from "./types";
 import { Property } from "@/types";
+import { useRouter } from "next/navigation";
 
-function Form({ properties, createRow, dbId }: FormProps) {
+function Form({ properties, handleCreateRow }: FormProps) {
     const { register, handleSubmit, formState } = useForm({});
 
-    const { isSubmitted } = formState;
+    const router = useRouter();
+    const handleCreateRowCallback = useCallback(
+        async (data: PropertyMap) => {
+            await handleCreateRow?.(data);
+        },
+        [handleCreateRow]
+    );
+
+    const { isSubmitted, errors } = formState;
+
+    // const onSubmit = async (data: any) => {
+    //     if (data.username === "bill") {
+    //       alert(JSON.stringify(data));
+    //     } else {
+    //       alert("There is an error");
+    //     }
+    //   };
 
     const propertyCollection: Property[] = Object.keys(properties)
         .map((key) => ({
@@ -52,15 +69,25 @@ function Form({ properties, createRow, dbId }: FormProps) {
 
     // console.log("propertyCollection", propertyCollection);
 
+    useEffect(() => {
+        if (isSubmitted) {
+            router.push("/");
+        }
+    }, [isSubmitted, router]);
+
     return (
         <>
             {isSubmitted ? (
-                <div>Thanks! Your Information has been collected.</div>
+                <div>
+                    Thanks! Your Information is being collected...
+                    <span> you will redirected shortly </span>
+                </div>
             ) : (
                 <StyledForm
-                    onSubmit={handleSubmit((data: PropertyMap) =>
-                        createRow({ properties, data, dbId })
-                    )}
+                    onSubmit={handleSubmit((data: PropertyMap) => {
+                        handleCreateRowCallback?.(data);
+                        // createRow({ properties, data, dbId, anonymous });
+                    })}
                 >
                     {propertyCollection.map((property) => (
                         <FormElement key={property.id} property={property} register={register} />
