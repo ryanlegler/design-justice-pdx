@@ -8,12 +8,13 @@ import { StyledCards } from "./styledComponents";
 // types
 import { CardsProps } from "./types";
 import { Card } from "../card/Card";
+// import { UserButton } from "@clerk/nextjs";
 
-function Cards({ items }: CardsProps) {
+function Cards({ items, extended }: CardsProps) {
     return (
         <StyledCards>
             {items.map((item) => (
-                <Card key={item.id} item={item} />
+                <Card extended={extended} key={item.id} item={item} />
             ))}
         </StyledCards>
     );

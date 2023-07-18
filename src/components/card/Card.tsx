@@ -15,6 +15,8 @@ import {
     CheckboxPropertyItemObjectResponse,
     FilesPropertyItemObjectResponse,
     CreatedByPropertyItemObjectResponse,
+    UrlPropertyItemObjectResponse,
+    NumberPropertyItemObjectResponse,
     CreatedTimePropertyItemObjectResponse,
     LastEditedByPropertyItemObjectResponse,
     LastEditedTimePropertyItemObjectResponse,
@@ -26,37 +28,18 @@ import {
     RollupPropertyItemObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
+// import { auth } from "@clerk/nextjs";
+
 const getPropertyValue = (property: PropertyResponse) => {
     const type = property.type as PropertyType;
 
-    console.log("type", type);
-    console.log("property", property);
+    // console.log("type", type);
+    // console.log("property", property);
 
     return {
-        select: () => {
-            return (property as SelectPropertyItemObjectResponse)?.select?.name;
-        },
-        multi_select: () => {
-            return "foo";
-        },
-        status: () => {
-            return "foo";
-        },
-        date: () => {
-            return "foo";
-        },
-        created_time: () => {
-            return "foo";
-        },
         title: () => {
-            // return (property as unknown as TitlePropertyItemObjectResponse)?.title?.[0]?.text?.content;
+            // return (property as unknown as TitlePropertyItemObjectResponse)?.title?.[0]?.text?.content; // type is wrong?
             return (property as any)?.title?.[0]?.text?.content;
-        },
-        email: () => {
-            return (property as EmailPropertyItemObjectResponse).email;
-        },
-        checkbox: () => {
-            return "foo";
         },
         text: () => {
             return (property as any)?.text?.[0]?.text?.content;
@@ -64,25 +47,58 @@ const getPropertyValue = (property: PropertyResponse) => {
         rich_text: () => {
             return (property as any)?.rich_text?.[0]?.text?.content;
         },
+        select: () => {
+            return (property as SelectPropertyItemObjectResponse)?.select?.name;
+        },
+        multi_select: () => {
+            return (property as MultiSelectPropertyItemObjectResponse)?.multi_select?.map(
+                (item) => <div key={item.id}>{item.name}</div>
+            );
+        },
+        status: () => {
+            return (property as StatusPropertyItemObjectResponse)?.status?.name;
+        },
+        date: () => {
+            return (property as DatePropertyItemObjectResponse)?.date?.start;
+        },
+        created_time: () => {
+            return (property as CreatedTimePropertyItemObjectResponse)?.created_time;
+        },
+        email: () => {
+            return (property as EmailPropertyItemObjectResponse).email;
+        },
+        checkbox: () => {
+            return (property as CheckboxPropertyItemObjectResponse)?.checkbox;
+        },
         number: () => {
-            return "foo";
+            return (property as NumberPropertyItemObjectResponse)?.number;
+        },
+        url: () => {
+            return (property as UrlPropertyItemObjectResponse)?.url;
         },
         phone_number: () => {
-            return (property as any)?.phone_number;
+            return (property as PhoneNumberPropertyItemObjectResponse)?.phone_number;
         },
     }[type]?.();
 };
-function Card({ item }: CardProps) {
+function Card({ item, extended }: CardProps) {
     const filteredProperties = useMemo(
         () =>
             item?.properties?.filter((property) => {
-                return property.type !== "title";
+                return property.type !== "title"; // why?
             }),
         [item?.properties]
     );
 
     return (
         <StyledCard>
+            {extended ? (
+                <div className="border border-gray-200 rounded-md p-2 flex items-center justify-between">
+                    <span>{item.name}</span>
+                    <img src={item.imageUrl} className="w-6 h-6 rounded-full" />
+                </div>
+            ) : null}
+
             {filteredProperties?.map((property: PropertyResponse) => {
                 return (
                     <div key={property.id}>
