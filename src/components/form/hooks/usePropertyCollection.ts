@@ -9,8 +9,6 @@ export function usePropertyCollection(properties: Properties): Property[] {
             return !property.name.includes("*admin");
         })
         .sort((a: Property, b: Property) => {
-            // sort by *order=0
-
             const aNameSegments = a.name.split("*");
             const aOrder = aNameSegments
                 .find((segment) => segment.includes("order="))

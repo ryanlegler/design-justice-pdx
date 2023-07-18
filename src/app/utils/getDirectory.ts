@@ -1,18 +1,18 @@
 import { ADMIN_ID, NAME_PROPERTY_ID } from "@/constants";
-import { notion } from "@/lib/notion";
+
 import { PropertyResponse } from "@/types";
 import {
     PageObjectResponse,
-    QueryDatabaseResponse,
     RichTextItemResponse,
     TextRichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-export async function getDirectory() {
-    const directoryRaw: QueryDatabaseResponse = await notion.databases.query({
-        database_id: process.env.NOTION_DIRECTORY_DATABASE_ID as string,
-    });
+import { getCachedNotionQuery } from "./getCachedNotionQuery";
 
+export async function getDirectory() {
+    const directoryRaw = await getCachedNotionQuery(
+        process.env.NOTION_DIRECTORY_DATABASE_ID as string
+    );
     const directory = directoryRaw?.results?.map((member) => {
         const properties = (member as PageObjectResponse).properties;
         const imageUrl = (properties as any)?.["imageUrl*admin"]?.rich_text?.[0]?.text?.content;

@@ -6,21 +6,15 @@ import { QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints"
 
 import { getFilteredItems } from "./utils/getFilteredItems";
 import { getHydratedItems } from "./utils/getHydratedItems";
+import { getCachedNotionQuery } from "./utils/getCachedNotionQuery";
 
 export default async function View() {
     const { userId } = auth();
-
-    const rawAsks: QueryDatabaseResponse = await notion.databases.query({
-        database_id: process.env.NOTION_ASKS_DATABASE_ID as string,
-    });
+    const rawAsks = await getCachedNotionQuery(process.env.NOTION_ASKS_DATABASE_ID as string);
     const asks = await getHydratedItems(rawAsks);
-
-    const rawOffers: QueryDatabaseResponse = await notion.databases.query({
-        database_id: process.env.NOTION_OFFERS_DATABASE_ID as string,
-    });
+    const rawOffers = await getCachedNotionQuery(process.env.NOTION_OFFERS_DATABASE_ID as string);
     const offers = await getHydratedItems(rawOffers);
     const filtered = await getFilteredItems(userId || "");
-
     const extended = !!userId && !!filtered?.length;
 
     return (
