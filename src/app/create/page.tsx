@@ -30,34 +30,16 @@ export default async function Create() {
     });
     const offersProperties: Properties = offersTable?.properties;
 
-    // const handleCreateOffersRow = async (data: PropertyMap) => {
-    //     "use server";
-    //     createRow({
-    //         properties: asksProperties,
-    //         data,
-    //         dbId: process.env.NOTION_OFFERS_DATABASE_ID as string,
-    //         onCreate: (response) => {
-    //             redirect("/");
-    //         },
-    //     });
-    // };
-
-    // if they are not logged in
-    // redirect("/login");
-
-    // if they are not registered
-    // redirect("/register");
-
     return (
         <main className="flex flex-col gap-2">
-            <h1 className="text-3xl">Add Ask</h1>
+            <h1 className="text-3xl">Submit an Ask</h1>
             <Form
                 handleCreateRow={handleCreateAskRow}
                 properties={asksProperties}
-                handleOnComplete={"/"}
+                redirectPath={"/"}
             />
 
-            <h1 className="text-3xl">Add Offer</h1>
+            <h1 className="text-3xl">Submit an Offer</h1>
             <Form
                 handleCreateRow={handleCreateOfferRow}
                 properties={offersProperties}

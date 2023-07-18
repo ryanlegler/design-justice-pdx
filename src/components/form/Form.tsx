@@ -1,6 +1,7 @@
 "use client";
 import React, { use, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 //components
 import { FormElement } from "../formElement";
@@ -11,13 +12,16 @@ import { StyledForm } from "./styledComponents";
 
 // types
 import { FormProps, PropertyMap } from "./types";
-import { Property } from "@/types";
-import { useRouter } from "next/navigation";
 
-function Form({ properties, handleCreateRow }: FormProps) {
-    const { register, handleSubmit, formState } = useForm({});
+// hooks
+import { usePropertyCollection } from "./hooks/usePropertyCollection";
 
+function Form({ properties, handleCreateRow, redirectPath }: FormProps) {
     const router = useRouter();
+    const { register, handleSubmit, formState } = useForm({});
+    const { isSubmitted } = formState;
+    const propertyCollection = usePropertyCollection(properties);
+
     const handleCreateRowCallback = useCallback(
         async (data: PropertyMap) => {
             await handleCreateRow?.(data);
@@ -25,68 +29,23 @@ function Form({ properties, handleCreateRow }: FormProps) {
         [handleCreateRow]
     );
 
-    const { isSubmitted, errors } = formState;
-
-    // const onSubmit = async (data: any) => {
-    //     if (data.username === "bill") {
-    //       alert(JSON.stringify(data));
-    //     } else {
-    //       alert("There is an error");
-    //     }
-    //   };
-
-    const propertyCollection: Property[] = Object.keys(properties)
-        .map((key) => ({
-            ...properties[key],
-        }))
-        .filter((property) => {
-            return !property.name.includes("*admin");
-        })
-        .sort((a: Property, b: Property) => {
-            // sort by *order=0
-
-            const aNameSegments = a.name.split("*");
-            const aOrder = aNameSegments
-                .find((segment) => segment.includes("order="))
-                ?.replace("order=", "");
-
-            const bNameSegments = b.name.split("*");
-            const bOrder = bNameSegments
-                .find((segment) => segment.includes("order="))
-                ?.replace("order=", "");
-
-            if (aOrder && bOrder) {
-                return parseInt(aOrder) - parseInt(bOrder);
-            } else {
-                return 0;
-            }
-        });
-
-    // const onSubmit = (data: PropertyMap) => {
-    //     console.log("onSubmit");
-    //     startTransition(() => createRow({ properties, data }));
-    // };
-
-    // console.log("propertyCollection", propertyCollection);
-
     useEffect(() => {
-        if (isSubmitted) {
-            router.push("/");
+        if (isSubmitted && redirectPath) {
+            router.push(redirectPath);
         }
-    }, [isSubmitted, router]);
+    }, [isSubmitted, router, redirectPath]);
 
     return (
         <>
             {isSubmitted ? (
                 <div>
-                    Thanks! Your Information is being collected...
-                    <span> you will redirected shortly </span>
+                    Success! Your Information has been submitted.
+                    <span> You will redirected shortly...</span>
                 </div>
             ) : (
                 <StyledForm
                     onSubmit={handleSubmit((data: PropertyMap) => {
                         handleCreateRowCallback?.(data);
-                        // createRow({ properties, data, dbId, anonymous });
                     })}
                 >
                     {propertyCollection.map((property) => (

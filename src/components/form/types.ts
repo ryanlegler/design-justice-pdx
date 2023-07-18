@@ -1,13 +1,9 @@
 import { Properties } from "@/types";
-import { CreatePageResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export type FormProps = {
     properties: Properties;
-    // createRow?: any;
-    // dbId: string;
-    // anonymous?: boolean;
-    // onCreate?: (response: CreatePageResponse) => void;
-    handleCreateRow?: any;
+    redirectPath?: string;
+    handleCreateRow?: (data: PropertyMap) => Promise<void>;
     handleOnComplete?: string;
 };
 
