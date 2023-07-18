@@ -9,6 +9,7 @@ const temp: Properties = {};
 export type Property = (typeof temp)[""];
 export type PropertyType =
     | "multi_select"
+    | "url"
     | "date"
     | "title"
     | "text"
@@ -32,6 +33,9 @@ const temp2: PropertyResponse1 = {};
 export type PropertyResponse = (typeof temp2)[""];
 export type Item = {
     id: string;
+    imageUrl?: string;
+    userId: string;
+    name: string;
     properties: PropertyResponse[];
 };
 
