@@ -2,7 +2,11 @@ import { useCallback, useMemo } from "react";
 import { Property, PropertyType, Option } from "@/types";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 import { Select } from "@/components/select";
-import { StyledFormGroup, StyledInput } from "@/components/styledComponents";
+import { StyledFormGroup, StyledFormGroupInline, StyledInput } from "@/components/styledComponents";
+
+// import { z } from "zod";
+// const UrlSchema = z.string().url();
+// export type Url = z.infer<typeof UrlSchema>;
 
 export function useFormElement({
     property,
@@ -18,8 +22,13 @@ export function useFormElement({
             const nameSegments = raw.split("*");
             const name = nameSegments?.[0] || raw;
             const required = nameSegments.some((segment) => segment === "required");
+
+            const placeholder = nameSegments
+                .find((segment) => segment.startsWith("placeholder"))
+                ?.replace("placeholder=", "");
             const type = property.type as PropertyType;
             const options = (property as any)?.[type]?.options as Option[]; // fix any
+
             return {
                 select: () => {
                     return (
@@ -28,10 +37,10 @@ export function useFormElement({
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
                             <Select
+                                placeholder={placeholder}
                                 required={required}
                                 options={options}
                                 {...register(id, { required })}
-                                // placeholder={name}
                             />
                         </StyledFormGroup>
                     );
@@ -42,7 +51,12 @@ export function useFormElement({
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <Select required={required} options={options} {...register(id)} />
+                            <Select
+                                placeholder={placeholder}
+                                required={required}
+                                options={options}
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
@@ -52,7 +66,12 @@ export function useFormElement({
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <Select required={required} options={options} {...register(id)} />
+                            <Select
+                                placeholder={placeholder}
+                                required={required}
+                                options={options}
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
@@ -66,13 +85,33 @@ export function useFormElement({
                         </StyledFormGroup>
                     );
                 },
+                url: () => {
+                    return (
+                        <StyledFormGroup required={required}>
+                            <span>
+                                {name} {required ? <span className="text-red-600">*</span> : null}
+                            </span>
+                            <StyledInput
+                                placeholder={placeholder}
+                                required={required}
+                                type="url"
+                                {...register(id)}
+                            />
+                        </StyledFormGroup>
+                    );
+                },
                 created_time: () => {
                     return (
                         <StyledFormGroup required={required}>
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <StyledInput required={required} type="date" {...register(id)} />
+                            <StyledInput
+                                placeholder={placeholder}
+                                required={required}
+                                type="date"
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
@@ -82,7 +121,12 @@ export function useFormElement({
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <StyledInput required={required} type="text" {...register(id)} />
+                            <StyledInput
+                                placeholder={placeholder}
+                                required={required}
+                                type="text"
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
@@ -92,18 +136,29 @@ export function useFormElement({
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <StyledInput required={required} type="email" {...register(id)} />
+                            <StyledInput
+                                placeholder={placeholder}
+                                required={required}
+                                type="email"
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
                 checkbox: () => {
                     return (
-                        <StyledFormGroup required={required}>
+                        // instead of StyledFormGroupInline - use a variant, or className override pattern
+                        <StyledFormGroupInline required={required}>
+                            <StyledInput
+                                placeholder={placeholder}
+                                required={required}
+                                type="checkbox"
+                                {...register(id)}
+                            />
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <StyledInput required={required} type="checkbox" {...register(id)} />
-                        </StyledFormGroup>
+                        </StyledFormGroupInline>
                     );
                 },
                 text: () => {
@@ -113,7 +168,7 @@ export function useFormElement({
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
                             <StyledInput
-                                // placeholder={name}
+                                placeholder={placeholder}
                                 required={required}
                                 type="text"
                                 {...register(id)}
@@ -128,7 +183,7 @@ export function useFormElement({
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
                             <StyledInput
-                                // placeholder={name}
+                                placeholder={placeholder}
                                 required={required}
                                 type="text"
                                 {...register(id)}
@@ -142,7 +197,12 @@ export function useFormElement({
                             <span>
                                 {name} {required ? <span className="text-red-600">*</span> : null}
                             </span>
-                            <StyledInput required={required} type="text" {...register(id)} />
+                            <StyledInput
+                                placeholder={placeholder}
+                                required={required}
+                                type="number"
+                                {...register(id)}
+                            />
                         </StyledFormGroup>
                     );
                 },
@@ -150,12 +210,15 @@ export function useFormElement({
                     return (
                         <StyledFormGroup required={required}>
                             <span>
-                                {name} {required ? <span className="text-red-600">*</span> : null}
+                                {name}
+                                {required ? <span className="text-red-600">*</span> : null}
                             </span>
                             <StyledInput
-                                // placeholder={name}
+                                placeholder={placeholder}
+                                title="Telephone number: xxx-xxx-xxxx"
                                 required={required}
-                                // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                                id="phone"
+                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                 type="tel"
                                 {...register(id)}
                             />
