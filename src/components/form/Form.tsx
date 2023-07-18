@@ -40,7 +40,7 @@ function Form({ properties, handleCreateRow, redirectPath }: FormProps) {
             {isSubmitted ? (
                 <div>
                     Success! Your Information has been submitted.
-                    <span> You will redirected shortly...</span>
+                    <span> You will be redirected shortly...</span>
                 </div>
             ) : (
                 <StyledForm

@@ -59,7 +59,18 @@ const getPropertyValue = (property: PropertyResponse) => {
             return (property as StatusPropertyItemObjectResponse)?.status?.name;
         },
         date: () => {
-            return (property as DatePropertyItemObjectResponse)?.date?.start;
+            const rawTime = (property as DatePropertyItemObjectResponse)?.date?.start || "";
+            const formattedTime = new Date(rawTime).toLocaleDateString("en-US", {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                // hour: "numeric",
+                // minute: "numeric",
+                // second: "numeric",
+                // timeZoneName: "short",
+            });
+            return formattedTime;
         },
         created_time: () => {
             return (property as CreatedTimePropertyItemObjectResponse)?.created_time;
