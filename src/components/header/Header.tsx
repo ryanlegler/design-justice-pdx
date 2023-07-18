@@ -31,10 +31,8 @@ async function Header({}: HeaderProps) {
             </StyledImageWrap>
 
             <div className="flex gap-10">
-                <Link href="/">Register</Link>
-                <Link href="/edit">My Asks/Offers</Link>
-                <Link href="/directory">Directory</Link>
-                <Link href="/create">Add New Ask / Offer</Link>
+                <Link href="/">Asks/Offers</Link>
+                <Link href="/create">New</Link>
             </div>
 
             <SignedIn>
